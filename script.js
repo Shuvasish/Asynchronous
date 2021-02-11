@@ -138,9 +138,26 @@ const renderCountry = function (data, neighbor = '') {
 //     });
 // };
 
+// const getCountryData = function (country = 'bangladesh') {
+//   fetch(`https://restcountries.eu/rest/v2/name/${country}`)
+//     .then(res => res.json())
+//     .then(data => {
+//       renderCountry(data[0]);
+//     });
+// };
+// getCountryData();
+
 const getCountryData = function (country = 'bangladesh') {
   fetch(`https://restcountries.eu/rest/v2/name/${country}`)
     .then(res => res.json())
-    .then(data => renderCountry(data[0]));
+    .then(data => {
+      renderCountry(data[0]);
+      const [neighbor] = data[0].borders;
+      console.log(neighbor);
+      if (!neighbor) return;
+      return fetch(`https://restcountries.eu/rest/v2/alpha/${neighbor}`);
+    })
+    .then(res => res.json())
+    .then(data => renderCountry(data, 'neighbour'));
 };
 getCountryData();
