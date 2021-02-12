@@ -303,6 +303,46 @@ const getCountryData = function (country) {
     });
 };
 btn.addEventListener('click', function (e) {
-  getCountryData('australia');
+  getCountryData('bd');
 });
 //   getCountryData();
+
+////////////////////////////////////
+////////////////////////////////////
+////////////////////////////////////
+
+//challenge 1
+
+const whereAmI = function (lat = 0, lng = 0) {
+  fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`)
+    .then(res => {
+      console.log(res);
+      if (!res.ok)
+        throw new Error(`supply proper value ${res.statusText} ${res.status}`);
+      return res.json();
+    })
+    .then(data => {
+      // if (!data.ok) return new Error(`supply proper value `);
+      console.log(data);
+
+      const { city, country } = data;
+      console.log(`You are in ${city}, ${country}`);
+      fetch(`https://restcountries.eu/rest/v2/name/${country}`)
+        .then(res => {
+          if (!res.ok) throw new Error('na na na');
+          return res.json();
+        })
+        .then(data => {
+          console.log(data[0].name);
+          getCountryData(data[0].name);
+        })
+        .catch(err => console.log(err.message));
+    })
+    .catch(err => {
+      console.log(`something went wrong: ${err.message}`);
+    });
+};
+
+// whereAmI(19.037, 72.873);
+whereAmI(52.508, 13.381);
+// whereAmI(8767, 987897);
