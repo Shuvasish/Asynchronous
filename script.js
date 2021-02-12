@@ -2,7 +2,7 @@
 
 const btn = document.querySelector('.btn-country');
 const countriesContainer = document.querySelector('.countries');
-
+const spinner = document.querySelector('.temp');
 ///////////////////////////////////////
 ///////////////////////////////////////
 ///////////////////////////////////////
@@ -174,13 +174,57 @@ const renderCountry = function (data, neighbor = '') {
 
 // error handling
 
+// const renderError = function (msg) {
+//   countriesContainer.insertAdjacentText('beforeend', `o noh ${msg.message}`);
+// };
+
+// const getCountryData = function (country) {
+//   fetch(`https://restcountries.eu/rest/v2/name/${country}`)
+//     .then(res => res.json())
+//     .then(data => {
+//       spinner.style.display = 'none';
+//       renderCountry(data[0]);
+//       const [neighbor] = data[0].borders;
+//       //   console.log(neighbor);
+//       if (!neighbor) return;
+//       return fetch(`https://restcountries.eu/rest/v2/alpha/${neighbor}`);
+//     })
+//     .then(res => res.json())
+//     .then(data => renderCountry(data, 'neighbour'))
+//     .catch(err => {
+//       console.error(`${err.message} o no`);
+//       renderError(err);
+//     })
+//     .finally(() => {
+//       countriesContainer.style.opacity = 1;
+//     });
+// };
+// btn.addEventListener('click', function (e) {
+//   getCountryData('bd');
+// });
+//   getCountryData();
+
+//////////////////////////////////
+//////////////////////////////////
+//////////////////////////////////
+
+// manually handling error
+
 const renderError = function (msg) {
   countriesContainer.insertAdjacentText('beforeend', `o noh ${msg.message}`);
 };
 
 const getCountryData = function (country) {
   fetch(`https://restcountries.eu/rest/v2/name/${country}`)
-    .then(res => res.json())
+    .then(res => {
+      console.log(res);
+      //throwing error manually
+      if (!res.ok) {
+        throw new Error(`country not found ${res.status}`);
+      }
+      //   console.log('ok2');
+      return res.json();
+    })
     .then(data => {
       renderCountry(data[0]);
       const [neighbor] = data[0].borders;
@@ -188,13 +232,20 @@ const getCountryData = function (country) {
       if (!neighbor) return;
       return fetch(`https://restcountries.eu/rest/v2/alpha/${neighbor}`);
     })
-    .then(res => res.json())
+    .then(res => {
+      if (!res.ok) {
+        throw new Error(`neighbor not found ${res.status}`);
+      }
+      return res.json();
+    })
     .then(data => renderCountry(data, 'neighbour'))
     .catch(err => {
+      console.dir(err);
       console.error(`${err.message} o no`);
       renderError(err);
     })
     .finally(() => {
+      spinner.style.display = 'none';
       countriesContainer.style.opacity = 1;
     });
 };

@@ -44,7 +44,21 @@ body {
   margin: 0 3rem;
   /* overflow: hidden; */
 }
-
+.spinner {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  /* background: #ddd; */
+  /* border: 2px solid; */
+  background: conic-gradient(#7abd3300, #7abd33);
+  /* border-color: white black black; */
+  animation: spin 1.2s infinite linear;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
 .neighbour::before {
   content: 'Neighbour country';
   width: 100%;
