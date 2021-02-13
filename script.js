@@ -390,47 +390,63 @@ btn.addEventListener('click', function (e) {
 ////////////////////////////////////
 
 // promisify
-console.log('start');
-const lotteryPromise = new Promise(function (res, rej) {
-  console.log('lottery draw is happening');
-  setTimeout(() => {
-    if (Math.random() >= 0.5) {
-      res('you won');
-    } else {
-      rej(new Error('lost your money'));
-    }
-  }, 3000);
-});
+// console.log('start');
+// const lotteryPromise = new Promise(function (res, rej) {
+//   console.log('lottery draw is happening');
+//   setTimeout(() => {
+//     if (Math.random() >= 0.5) {
+//       res('you won');
+//     } else {
+//       rej(new Error('lost your money'));
+//     }
+//   }, 3000);
+// });
 
-console.log('end');
-lotteryPromise.then(res => console.log(res)).catch(err => console.error(err));
+// console.log('end');
+// lotteryPromise.then(res => console.log(res)).catch(err => console.error(err));
 
-// Promisifying setTimeout
-const wait = function (seconds) {
-  return new Promise(function (resolve) {
-    setTimeout(resolve, seconds * 1000);
-  });
-};
+// // Promisifying setTimeout
+// const wait = function (seconds) {
+//   return new Promise(function (resolve) {
+//     setTimeout(resolve, seconds * 1000);
+//   });
+// };
 
-wait(1)
-  .then(() => {
-    console.log('i waited for 2 seconds');
-    return wait(1);
-  })
-  .then(() => {
-    console.log('i waited for 2 seconds');
-    return wait(1);
-  })
-  .then(() => {
-    console.log('i waited for 2 seconds');
-    return wait(1);
-  })
-  .then(() => {
-    console.log('i waited for 2 seconds');
-    return wait(1);
-  })
-  .then(() => console.log('lsst'));
+// wait(1)
+//   .then(() => {
+//     console.log('i waited for 2 seconds');
+//     return wait(1);
+//   })
+//   .then(() => {
+//     console.log('i waited for 2 seconds');
+//     return wait(1);
+//   })
+//   .then(() => {
+//     console.log('i waited for 2 seconds');
+//     return wait(1);
+//   })
+//   .then(() => {
+//     console.log('i waited for 2 seconds');
+//     return wait(1);
+//   })
+//   .then(() => console.log('lsst'));
 
 //static promise
 
-Promise.resolve('abc').then(x => console.log(x));
+// Promise.resolve('abc').then(x => console.log(x));
+
+////////////////////////////////////
+////////////////////////////////////
+////////////////////////////////////
+
+// promisifying geolocation
+
+const getPosition = function () {
+  return new Promise(function (res, rej) {
+    navigator.geolocation.getCurrentPosition(res, rej);
+  });
+};
+
+getPosition()
+  .then(res => console.log(res))
+  .catch(err => console.log(err));
