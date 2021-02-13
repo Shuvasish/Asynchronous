@@ -353,14 +353,34 @@ btn.addEventListener('click', function (e) {
 
 //the event loop
 
-console.log('test data');
+// console.log('test data');
 
-setTimeout(() => {
-  console.log(`o's`);
-}, 0);
-Promise.resolve('Resolved promise 1').then(res => console.log(res));
-Promise.resolve('Resolved promise 2').then(res => {
-  for (let i = 0; i < 10000000000; i++) {}
-  console.log(res);
+// setTimeout(() => {
+//   console.log(`o's`);
+// }, 0);
+// Promise.resolve('Resolved promise 1').then(res => console.log(res));
+// Promise.resolve('Resolved promise 2').then(res => {
+//   for (let i = 0; i < 1000000000; i++) {}
+//   console.log(res);
+// });
+// console.log('test data end');
+
+////////////////////////////////////
+////////////////////////////////////
+////////////////////////////////////
+
+//creating own promises
+console.log('start');
+const lotteryPromise = new Promise(function (res, rej) {
+  console.log('lottery draw is happening');
+  setTimeout(() => {
+    if (Math.random() >= 0.5) {
+      res('you won');
+    } else {
+      rej(new Error('lost your money'));
+    }
+  }, 2000);
 });
-console.log('test data end');
+
+console.log('end');
+lotteryPromise.then(res => console.log(res)).catch(err => console.error(err));
