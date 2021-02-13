@@ -370,6 +370,26 @@ btn.addEventListener('click', function (e) {
 ////////////////////////////////////
 
 //creating own promises
+// console.log('start');
+// const lotteryPromise = new Promise(function (res, rej) {
+//   console.log('lottery draw is happening');
+//   setTimeout(() => {
+//     if (Math.random() >= 0.5) {
+//       res('you won');
+//     } else {
+//       rej(new Error('lost your money'));
+//     }
+//   }, 2000);
+// });
+
+// console.log('end');
+// lotteryPromise.then(res => console.log(res)).catch(err => console.error(err));
+
+////////////////////////////////////
+////////////////////////////////////
+////////////////////////////////////
+
+// promisify
 console.log('start');
 const lotteryPromise = new Promise(function (res, rej) {
   console.log('lottery draw is happening');
@@ -379,8 +399,38 @@ const lotteryPromise = new Promise(function (res, rej) {
     } else {
       rej(new Error('lost your money'));
     }
-  }, 2000);
+  }, 3000);
 });
 
 console.log('end');
 lotteryPromise.then(res => console.log(res)).catch(err => console.error(err));
+
+// Promisifying setTimeout
+const wait = function (seconds) {
+  return new Promise(function (resolve) {
+    setTimeout(resolve, seconds * 1000);
+  });
+};
+
+wait(1)
+  .then(() => {
+    console.log('i waited for 2 seconds');
+    return wait(1);
+  })
+  .then(() => {
+    console.log('i waited for 2 seconds');
+    return wait(1);
+  })
+  .then(() => {
+    console.log('i waited for 2 seconds');
+    return wait(1);
+  })
+  .then(() => {
+    console.log('i waited for 2 seconds');
+    return wait(1);
+  })
+  .then(() => console.log('lsst'));
+
+//static promise
+
+Promise.resolve('abc').then(x => console.log(x));
