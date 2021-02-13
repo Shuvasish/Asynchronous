@@ -3,6 +3,7 @@
 const btn = document.querySelector('.btn-country');
 const countriesContainer = document.querySelector('.countries');
 const spinner = document.querySelector('.temp');
+const imgs = document.querySelector('.images');
 ///////////////////////////////////////
 ///////////////////////////////////////
 ///////////////////////////////////////
@@ -46,27 +47,27 @@ const spinner = document.querySelector('.temp');
 
 // callback hell
 
-const renderCountry = function (data, neighbor = '') {
-  const html = ` <article class="country ${neighbor}">
-                      <img class="country__img" src="${data.flag}" />
-                      <div class="country__data">
-                          <h3 class="country__name">${data.name}</h3>
-                          <h4 class="country__region">${data.region}</h4>
-                          <p class="country__row"><span>👫</span>${+(
-                            data.population / 1000000
-                          ).toFixed(1)}M people</p>
-                          <p class="country__row"><span>🗣️</span>${
-                            data.languages[0].name
-                          }</p>
-                          <p class="country__row"><span>💰</span>${
-                            data.currencies[0].code
-                          }</p>
-                      </div>
-                  </article>`;
-  countriesContainer.insertAdjacentHTML('beforeend', html);
-  //   countriesContainer.style.opacity = 1;
-  //   console.dir(data.borders[0]);
-};
+// const renderCountry = function (data, neighbor = '') {
+//   const html = ` <article class="country ${neighbor}">
+//                       <img class="country__img" src="${data.flag}" />
+//                       <div class="country__data">
+//                           <h3 class="country__name">${data.name}</h3>
+//                           <h4 class="country__region">${data.region}</h4>
+//                           <p class="country__row"><span>👫</span>${+(
+//                             data.population / 1000000
+//                           ).toFixed(1)}M people</p>
+//                           <p class="country__row"><span>🗣️</span>${
+//                             data.languages[0].name
+//                           }</p>
+//                           <p class="country__row"><span>💰</span>${
+//                             data.currencies[0].code
+//                           }</p>
+//                       </div>
+//                   </article>`;
+//   countriesContainer.insertAdjacentHTML('beforeend', html);
+//   countriesContainer.style.opacity = 1;
+//   console.dir(data.borders[0]);
+// };
 
 //ajax call country 1
 // const getCountryDataAndNeighbor = function (country) {
@@ -261,50 +262,50 @@ const renderCountry = function (data, neighbor = '') {
 // handling error using HELPER FUNCTION
 
 //helper function
-const getJSON = function (url, errorMsg = 'something went wrong') {
-  return fetch(url).then(res => {
-    if (!res.ok) {
-      throw new Error(`${errorMsg} ${res.status}`);
-    }
+// const getJSON = function (url, errorMsg = 'something went wrong') {
+//   return fetch(url).then(res => {
+//     if (!res.ok) {
+//       throw new Error(`${errorMsg} ${res.status}`);
+//     }
 
-    return res.json();
-  });
-};
+//     return res.json();
+//   });
+// };
 
-const renderError = function (msg) {
-  countriesContainer.insertAdjacentText('beforeend', `o noh ${msg.message}`);
-};
+// const renderError = function (msg) {
+//   countriesContainer.insertAdjacentText('beforeend', `o noh ${msg.message}`);
+// };
 
-const getCountryData = function (country) {
-  getJSON(
-    `https://restcountries.eu/rest/v2/name/${country}`,
-    `country not found`
-  )
-    .then(data => {
-      renderCountry(data[0]);
-      const [neighbor] = data[0].borders;
-      //   console.log(neighbor);
-      if (!neighbor) throw new Error('no neighbor found');
-      return getJSON(
-        `https://restcountries.eu/rest/v2/alpha/${neighbor}`,
-        'country not found'
-      );
-    })
+// const getCountryData = function (country) {
+//   getJSON(
+//     `https://restcountries.eu/rest/v2/name/${country}`,
+//     `country not found`
+//   )
+//     .then(data => {
+//       renderCountry(data[0]);
+//       const [neighbor] = data[0].borders;
+//       //   console.log(neighbor);
+//       if (!neighbor) throw new Error('no neighbor found');
+//       return getJSON(
+//         `https://restcountries.eu/rest/v2/alpha/${neighbor}`,
+//         'country not found'
+//       );
+//     })
 
-    .then(data => renderCountry(data, 'neighbour'))
-    .catch(err => {
-      console.dir(err);
-      console.error(`${err.message} o no `);
-      renderError(err);
-    })
-    .finally(() => {
-      spinner.style.display = 'none';
-      countriesContainer.style.opacity = 1;
-    });
-};
-btn.addEventListener('click', function (e) {
-  getCountryData('bd');
-});
+//     .then(data => renderCountry(data, 'neighbour'))
+//     .catch(err => {
+//       console.dir(err);
+//       console.error(`${err.message} o no `);
+//       renderError(err);
+//     })
+//     .finally(() => {
+//       spinner.style.display = 'none';
+//       countriesContainer.style.opacity = 1;
+//     });
+// };
+// btn.addEventListener('click', function (e) {
+//   getCountryData('bd');
+// });
 //   getCountryData();
 
 ////////////////////////////////////
@@ -441,12 +442,149 @@ btn.addEventListener('click', function (e) {
 
 // promisifying geolocation
 
-const getPosition = function () {
-  return new Promise(function (res, rej) {
-    navigator.geolocation.getCurrentPosition(res, rej);
+// const getPosition = function () {
+//   return new Promise(function (res, rej) {
+//     navigator.geolocation.getCurrentPosition(res, rej);
+//   });
+// };
+
+// getPosition()
+//   .then(res => console.log(res))
+//   .catch(err => console.log(err));
+
+////////////////////////////////////
+////////////////////////////////////
+////////////////////////////////////
+
+// challenge two
+// const createImage = function (path) {
+//   const img = document.createElement('img');
+//   img.src = path;
+//   countriesContainer.append(img);
+// };
+
+// createImage('img/img-1.jpg',crtImg);
+// const waitImg = function(seconds){
+//   setTimeout(() => {
+//     return new Promise(function(res,rej){
+//       const img = document.createElement('img');
+//       img.src = path;
+//       countriesContainer.append(img);
+//     })
+//   }, seconds * 1000);
+// }
+
+// const createImage = function (path) {
+//   return new Promise(function (res, rej) {
+//     setTimeout(res => {
+//       const img = document.createElement('img');
+//       img.src = path;
+//       img.addEventListener('load', function () {
+//         imgs.append(img);
+//         console.log('2s');
+//       });
+//     }, 2000);
+//   });
+// };
+// // const a = createImage().then(res => console.log(res));
+// createImage('img/img-1.jpg');
+
+// const img = document.createElement('img');
+//   img.src = path;
+//   img.addEventListener('load', function () {
+//     imgs.append(img);
+//   });
+
+//used callback hell
+// const wait = function (seconds) {
+//   return new Promise(function (res) {
+//     setTimeout(res, seconds * 1000);
+//   });
+// };
+// const createImage = function (imgPath) {
+//   return new Promise(function (resolve, reject) {
+//     const img = document.createElement('img');
+//     img.src = imgPath;
+//     img.addEventListener('load', function () {
+//       imgs.append(img);
+//       resolve(img);
+//     });
+//     img.addEventListener('error', function () {
+//       reject(new Error('img not found'));
+//     });
+//   });
+// };
+// createImage('img/img-1.jpg')
+//   .then(res => {
+//     setTimeout(() => {
+//       console.log(res);
+//       res.classList.add('none');
+//       createImage('img/img-2.jpg').then(res => {
+//         setTimeout(() => {
+//           console.log(res);
+//           res.classList.add('none');
+//           createImage('img/img-3.jpg').then(res => {
+//             setTimeout(() => {
+//               console.log(res);
+//               res.classList.add('none');
+//             }, 2000);
+//             console.log(res);
+//             return res;
+//           });
+//         }, 2000);
+//         console.log(res);
+//         return res;
+//       });
+//     }, 2000);
+//     console.log(res);
+//     return res;
+//   })
+//   .catch(err => console.error(err));
+
+//using promisifying
+const wait = function (seconds) {
+  return new Promise(function (res) {
+    // console.dir(res);
+    setTimeout(res, seconds * 1000);
   });
 };
-
-getPosition()
-  .then(res => console.log(res))
-  .catch(err => console.log(err));
+const createImage = function (imgPath) {
+  return new Promise(function (resolve, reject) {
+    const img = document.createElement('img');
+    img.src = imgPath;
+    img.addEventListener('load', function () {
+      imgs.append(img);
+      resolve(img);
+    });
+    img.addEventListener('error', function () {
+      reject(new Error('img not found'));
+    });
+  });
+};
+let currentImg;
+createImage('img/img-1.jpg')
+  .then(img => {
+    currentImg = img;
+    console.log(img);
+    return wait(2);
+  })
+  .then(() => {
+    currentImg.style.display = 'none';
+    return createImage('img/img-2.jpg');
+  })
+  .then(img => {
+    currentImg = img;
+    return wait(2);
+  })
+  .then(() => {
+    currentImg.style.display = 'none';
+    return createImage('img/img-3.jpg');
+  })
+  .then(img => {
+    currentImg = img;
+    return wait(2);
+  })
+  .then(() => {
+    currentImg.style.display = 'none';
+  })
+  .catch(err => console.error(err));
