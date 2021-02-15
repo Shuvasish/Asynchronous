@@ -595,8 +595,29 @@ const renderCountry = function (data, neighbor = '') {
 
 // async await
 
-const whereAmI = async function (country) {
-  const cn = await fetch(`https://restcountries.eu/rest/v2/name/${country}`);
+//geo location
+const getPosition = function () {
+  return new Promise(function (res, rej) {
+    navigator.geolocation.getCurrentPosition(res, rej);
+  });
+};
+
+// async await
+
+const whereAmI = async function () {
+  //geo location
+  const pos = await getPosition();
+  const { latitude: lat, longitude: lng } = pos.coords;
+
+  //reverse geo coding
+  const resGeo = await fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`);
+  const dataGeo = await resGeo.json();
+  console.log(dataGeo);
+
+  //country data
+  const cn = await fetch(
+    `https://restcountries.eu/rest/v2/name/${dataGeo.country}`
+  );
   console.log('before fetch');
   const data = await cn.json();
   console.log(data);
