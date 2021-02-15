@@ -595,6 +595,54 @@ const renderCountry = function (data, neighbor = '') {
 
 // async await
 
+// //geo location
+// const getPosition = function () {
+//   return new Promise(function (res, rej) {
+//     navigator.geolocation.getCurrentPosition(res, rej);
+//   });
+// };
+
+// // async await
+
+// const whereAmI = async function () {
+//   //geo location
+//   const pos = await getPosition();
+//   const { latitude: lat, longitude: lng } = pos.coords;
+
+//   //reverse geo coding
+//   const resGeo = await fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`);
+//   const dataGeo = await resGeo.json();
+//   console.log(dataGeo);
+
+//   //country data
+//   const cn = await fetch(
+//     `https://restcountries.eu/rest/v2/name/${dataGeo.country}`
+//   );
+//   console.log('before fetch');
+//   const data = await cn.json();
+//   console.log(data);
+//   console.log('after fetch');
+//   renderCountry(data[0]);
+// };
+// // whereAmI('bangladesh');
+// console.log('one');
+
+// const whereAmI2 = async function (country) {
+//   fetch(`https://restcountries.eu/rest/v2/name/${country}`)
+//     .then(res => res.json())
+//     .then(data => console.log(data));
+
+//   console.log('after fetch');
+// };
+// console.log('one');
+// whereAmI2('bangladesh');
+
+///////////////////////////////
+///////////////////////////////
+///////////////////////////////
+
+//catch
+
 //geo location
 const getPosition = function () {
   return new Promise(function (res, rej) {
@@ -606,33 +654,30 @@ const getPosition = function () {
 
 const whereAmI = async function () {
   //geo location
-  const pos = await getPosition();
-  const { latitude: lat, longitude: lng } = pos.coords;
+  try {
+    const pos = await getPosition();
+    const { latitude: lat, longitude: lng } = pos.coords;
 
-  //reverse geo coding
-  const resGeo = await fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`);
-  const dataGeo = await resGeo.json();
-  console.log(dataGeo);
+    //reverse geo coding
+    const resGeo = await fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`);
+    if (!resGeo.ok) throw new Error('problem is in location');
+    const dataGeo = await resGeo.json();
+    console.log(dataGeo);
 
-  //country data
-  const cn = await fetch(
-    `https://restcountries.eu/rest/v2/name/${dataGeo.country}`
-  );
-  console.log('before fetch');
-  const data = await cn.json();
-  console.log(data);
-  console.log('after fetch');
-  renderCountry(data[0]);
+    //country data
+    const cn = await fetch(
+      `https://restcountries.eu/rest/v2/name/${dataGeo.country}`
+    );
+    if (!cn.ok) throw new Error('problem is in country');
+    console.log('before fetch');
+    const data = await cn.json();
+    console.log(data);
+    console.log('after fetch');
+    renderCountry(data[0]);
+  } catch (err) {
+    console.error(err);
+  }
 };
+
 whereAmI('bangladesh');
 console.log('one');
-
-// const whereAmI2 = async function (country) {
-//   fetch(`https://restcountries.eu/rest/v2/name/${country}`)
-//     .then(res => res.json())
-//     .then(data => console.log(data));
-
-//   console.log('after fetch');
-// };
-// console.log('one');
-// whereAmI2('bangladesh');
