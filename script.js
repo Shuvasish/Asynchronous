@@ -47,27 +47,27 @@ const imgs = document.querySelector('.images');
 
 // callback hell
 
-// const renderCountry = function (data, neighbor = '') {
-//   const html = ` <article class="country ${neighbor}">
-//                       <img class="country__img" src="${data.flag}" />
-//                       <div class="country__data">
-//                           <h3 class="country__name">${data.name}</h3>
-//                           <h4 class="country__region">${data.region}</h4>
-//                           <p class="country__row"><span>👫</span>${+(
-//                             data.population / 1000000
-//                           ).toFixed(1)}M people</p>
-//                           <p class="country__row"><span>🗣️</span>${
-//                             data.languages[0].name
-//                           }</p>
-//                           <p class="country__row"><span>💰</span>${
-//                             data.currencies[0].code
-//                           }</p>
-//                       </div>
-//                   </article>`;
-//   countriesContainer.insertAdjacentHTML('beforeend', html);
-//   countriesContainer.style.opacity = 1;
-//   console.dir(data.borders[0]);
-// };
+const renderCountry = function (data, neighbor = '') {
+  const html = ` <article class="country ${neighbor}">
+                      <img class="country__img" src="${data.flag}" />
+                      <div class="country__data">
+                          <h3 class="country__name">${data.name}</h3>
+                          <h4 class="country__region">${data.region}</h4>
+                          <p class="country__row"><span>👫</span>${+(
+                            data.population / 1000000
+                          ).toFixed(1)}M people</p>
+                          <p class="country__row"><span>🗣️</span>${
+                            data.languages[0].name
+                          }</p>
+                          <p class="country__row"><span>💰</span>${
+                            data.currencies[0].code
+                          }</p>
+                      </div>
+                  </article>`;
+  countriesContainer.insertAdjacentHTML('beforeend', html);
+  countriesContainer.style.opacity = 1;
+  console.dir(data.borders[0]);
+};
 
 //ajax call country 1
 // const getCountryDataAndNeighbor = function (country) {
@@ -542,49 +542,76 @@ const imgs = document.querySelector('.images');
 //   .catch(err => console.error(err));
 
 //using promisifying
-const wait = function (seconds) {
-  return new Promise(function (res) {
-    // console.dir(res);
-    setTimeout(res, seconds * 1000);
-  });
+// const wait = function (seconds) {
+//   return new Promise(function (res) {
+//     // console.dir(res);
+//     setTimeout(res, seconds * 1000);
+//   });
+// };
+// const createImage = function (imgPath) {
+//   return new Promise(function (resolve, reject) {
+//     const img = document.createElement('img');
+//     img.src = imgPath;
+//     img.addEventListener('load', function () {
+//       imgs.append(img);
+//       resolve(img);
+//     });
+//     img.addEventListener('error', function () {
+//       reject(new Error('img not found'));
+//     });
+//   });
+// };
+// let currentImg;
+// createImage('img/img-1.jpg')
+//   .then(img => {
+//     currentImg = img;
+//     console.log(img);
+//     return wait(2);
+//   })
+//   .then(() => {
+//     currentImg.style.display = 'none';
+//     return createImage('img/img-2.jpg');
+//   })
+//   .then(img => {
+//     currentImg = img;
+//     return wait(2);
+//   })
+//   .then(() => {
+//     currentImg.style.display = 'none';
+//     return createImage('img/img-3.jpg');
+//   })
+//   .then(img => {
+//     currentImg = img;
+//     return wait(2);
+//   })
+//   .then(() => {
+//     currentImg.style.display = 'none';
+//   })
+//   .catch(err => console.error(err));
+
+////////////////////////////////////
+////////////////////////////////////
+////////////////////////////////////
+
+// async await
+
+const whereAmI = async function (country) {
+  const cn = await fetch(`https://restcountries.eu/rest/v2/name/${country}`);
+  console.log('before fetch');
+  const data = await cn.json();
+  console.log(data);
+  console.log('after fetch');
+  renderCountry(data[0]);
 };
-const createImage = function (imgPath) {
-  return new Promise(function (resolve, reject) {
-    const img = document.createElement('img');
-    img.src = imgPath;
-    img.addEventListener('load', function () {
-      imgs.append(img);
-      resolve(img);
-    });
-    img.addEventListener('error', function () {
-      reject(new Error('img not found'));
-    });
-  });
-};
-let currentImg;
-createImage('img/img-1.jpg')
-  .then(img => {
-    currentImg = img;
-    console.log(img);
-    return wait(2);
-  })
-  .then(() => {
-    currentImg.style.display = 'none';
-    return createImage('img/img-2.jpg');
-  })
-  .then(img => {
-    currentImg = img;
-    return wait(2);
-  })
-  .then(() => {
-    currentImg.style.display = 'none';
-    return createImage('img/img-3.jpg');
-  })
-  .then(img => {
-    currentImg = img;
-    return wait(2);
-  })
-  .then(() => {
-    currentImg.style.display = 'none';
-  })
-  .catch(err => console.error(err));
+whereAmI('bangladesh');
+console.log('one');
+
+// const whereAmI2 = async function (country) {
+//   fetch(`https://restcountries.eu/rest/v2/name/${country}`)
+//     .then(res => res.json())
+//     .then(data => console.log(data));
+
+//   console.log('after fetch');
+// };
+// console.log('one');
+// whereAmI2('bangladesh');
