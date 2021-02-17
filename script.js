@@ -824,6 +824,52 @@ const createImage = function (url) {
   });
 };
 let currentImg;
+
+const loadAll = async function (arr) {
+  try {
+    const imgBoss = arr.map(async img => await createImage(img));
+    console.log(imgBoss);
+    const imgEl = await Promise.all(imgBoss);
+    console.log(imgEl);
+    imgEl.forEach(e => e.classList.add('parallel'));
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+// const loadAll = async function (arr) {
+//   try {
+//     let luladata = [];
+//     const imgBoss = arr.map(async function (data) {
+//       try {
+//         const dat = await createImage(data);
+//         console.log(dat);
+//         luladata.push(dat);
+//         return data;
+//       } catch (err) {
+//         console.error('o god, ' + err.message);
+//       }
+//     });
+//     console.log(imgBoss);
+//     const mp = Promise.allSettled(imgBoss);
+//     console.log(mp);
+//     const m = await mp;
+//     console.log(luladata);
+//     m.forEach(o => {
+//       console.log(o.value);
+//       console.log(o.value.src);
+//     });
+//     luladata.forEach(el => el.classList.add('parallel'));
+//     console.log(m);
+//     // mp.forEach(i => console.log(i));
+//     imgBoss.forEach(el => {
+//       el.then(e => console.dir(e));
+//     });
+//   } catch (err) {
+//     console.log(err + ' oh no error has come');
+//   }
+// };
+const ok = loadAll(['img/img-1.jpg', 'img/img-2.jpg', 'img/img-3.jpg']);
 (async function () {
   let img = await createImage('img/img-1.jpg');
   await wait(2);
@@ -834,7 +880,7 @@ let currentImg;
   img = await createImage('img/img-3.jpg');
   await wait(2);
   img.style.display = 'none';
-})();
+});
 // const temp = createImage('img/img-1.jpg')
 //   .then(res => {
 //     console.log(res);
