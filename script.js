@@ -660,7 +660,7 @@ const whereAmI = async function () {
 
     //reverse geo coding
     const resGeo = await fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`);
-    if (!resGeo.ok) throw new Error('problem is in location');
+    if (!resGeo.ok) throw new Error('problem is in location 💥1');
     const dataGeo = await resGeo.json();
     console.log(dataGeo);
 
@@ -668,16 +668,56 @@ const whereAmI = async function () {
     const cn = await fetch(
       `https://restcountries.eu/rest/v2/name/${dataGeo.country}`
     );
-    if (!cn.ok) throw new Error('problem is in country');
+    if (!cn.ok) throw new Error('problem is in country 💥2');
     console.log('before fetch');
     const data = await cn.json();
     console.log(data);
     console.log('after fetch');
     renderCountry(data[0]);
+    return data[0];
   } catch (err) {
     console.error(err);
+    throw err;
   }
 };
 
-whereAmI('bangladesh');
+whereAmI()
+  .then(d => console.log(d))
+  .catch(err => console.error(err, '💥'));
+// console.log(city);
 console.log('one');
+
+const getJSON = function (url, errorMsg = 'something went wrong') {
+  return fetch(url).then(res => {
+    if (!res.ok) {
+      throw new Error(`${errorMsg} ${res.status}`);
+    }
+
+    return res.json();
+  });
+};
+
+const get3country = async function (c1, c2, c3) {
+  try {
+    // const [data1] = await getJSON(
+    //   `https://restcountries.eu/rest/v2/name/${c1}`
+    // );
+    // const [data2] = await getJSON(
+    //   `https://restcountries.eu/rest/v2/name/${c2}`
+    // );
+    // const [data3] = await getJSON(
+    //   `https://restcountries.eu/rest/v2/name/${c3}`
+    // );
+    // console.log([data1.capital, data2.capital, data3.capital]);
+
+    const data = await Promise.all([
+      getJSON(`https://restcountries.eu/rest/v2/name/${c1}`),
+      getJSON(`https://restcountries.eu/rest/v2/name/${c2}`),
+      getJSON(`https://restcountries.eu/rest/v2/name/${c3}`),
+    ]);
+    console.log(data.map(con => con[0].capital));
+  } catch (err) {
+    console.log('o no err err', err);
+  }
+};
+get3country('bangladesh', 'pakistan', 'nepal');
