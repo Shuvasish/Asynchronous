@@ -721,3 +721,43 @@ const get3country = async function (c1, c2, c3) {
   }
 };
 get3country('bangladesh', 'pakistan', 'nepal');
+
+(async function () {
+  const data = await Promise.race([
+    getJSON(`https://restcountries.eu/rest/v2/name/bangladesh`),
+    getJSON(`https://restcountries.eu/rest/v2/name/italy`),
+    getJSON(`https://restcountries.eu/rest/v2/name/nepal`),
+  ]);
+  console.log(
+    '000000000000000000000000000000000000000000000000000000000000000000000000'
+  );
+  console.log(data[0].name);
+})();
+const timeout = function (s) {
+  return new Promise(function (_, reject) {
+    setTimeout(() => {
+      reject(new Error('o no reject timeout'));
+    }, s);
+  });
+};
+
+//promise race
+Promise.race([
+  getJSON(`https://restcountries.eu/rest/v2/name/usa`),
+  timeout(1000),
+])
+  .then(res => console.log(res[0]))
+  .catch(err => console.log(err));
+
+//promise allSettled
+Promise.allSettled([
+  getJSON(`https://restcountries.eu/rest/v2/name/usa`),
+  timeout(1000),
+])
+  .then(res => console.log(res))
+  .catch(err => console.log(err));
+
+//promise any
+Promise.any([getJSON(`https://restcountries.eu/rest/v2/name/usa`), timeout(1)])
+  .then(res => console.log(res))
+  .catch(err => console.log(err));
